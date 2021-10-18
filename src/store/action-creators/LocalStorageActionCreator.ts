@@ -1,9 +1,9 @@
-import {ActionTypes, CountDownAction, CountDownLap} from '../../types';
+import {ActionTypes, CountDownAction, CountDownState} from '../../types';
 import {Dispatch} from 'redux';
 import {settings} from '../../consts';
 
 type TLoadSate = () => (dispatch: Dispatch<CountDownAction>) => void
-type TSaveState = (state: CountDownLap[]) => (dispatch: Dispatch<CountDownAction>) => void
+type TSaveState = (state: CountDownState) => (dispatch: Dispatch<CountDownAction>) => void
 
 export const loadLocalState: TLoadSate = () => {
   return (dispatch: Dispatch<CountDownAction>) => {
@@ -22,9 +22,10 @@ export const loadLocalState: TLoadSate = () => {
   }
 }
 
-export const saveLocalState: TSaveState = (state: CountDownLap[]) => {
+export const saveLocalState: TSaveState = (state: CountDownState) => {
   return (dispatch: Dispatch<CountDownAction>) => {
     try {
+      console.log(state)
       dispatch({type: ActionTypes.SAVE_STATE})
       localStorage.setItem(settings.localStorageKey, JSON.stringify(state));
       dispatch({type: ActionTypes.SAVE_STATE_SUCCESS})

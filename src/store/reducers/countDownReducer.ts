@@ -1,7 +1,8 @@
-import {ActionTypes, CountDownAction, CountDownLap, CountDownState, LapStatus} from '../../types';
+import {ActionTypes, CountDownAction, CountDownLap, CountDownState, GlobalState, LapStatus} from '../../types';
 import {settings} from '../../consts';
 
 const initialState: CountDownState = {
+  globalState: GlobalState.INIT,
   laps: [],
   initialTimer: settings.defaultInitialTime,
   error: null
@@ -15,7 +16,7 @@ export const countDownReducer = (state = initialState, action: CountDownAction):
     case ActionTypes.LOAD_STATE:
       return {...state}
     case ActionTypes.LOAD_STATE_SUCCESS:
-      return {...state, laps: action.payload}
+      return {...state, ...action.payload }
     case ActionTypes.LOAD_STATE_ERROR:
       return {...state, error: action.payload}
 
@@ -36,7 +37,7 @@ export const countDownReducer = (state = initialState, action: CountDownAction):
         startDateTime: new Date().getTime(),
         status: LapStatus.LAP_STARTED
       }
-      return {...state, laps: [newLap]}
+      return {...state, laps: [newLap], globalState: GlobalState.INIT}
     }
 
     case ActionTypes.START_COUNTER: {
@@ -54,7 +55,7 @@ export const countDownReducer = (state = initialState, action: CountDownAction):
         startDateTime: new Date().getTime(),
         status: LapStatus.LAP_STARTED
       }
-      return {...state, laps: [...laps, newLap]}
+      return {...state, laps: [...laps, newLap], globalState: GlobalState.STARTED}
     }
 
     case ActionTypes.STOP_COUNTER: {
@@ -63,18 +64,18 @@ export const countDownReducer = (state = initialState, action: CountDownAction):
         laps[laps.length - 1].endDateTime = new Date().getTime()
         laps[laps.length - 1].duration = Math.abs(laps[laps.length - 1].startDateTime - new Date().getTime());
       }
-      return {...state, laps}
+      return {...state, laps, globalState: GlobalState.STOPPED}
     }
 
     case ActionTypes.PAUSE_COUNTER: {
       const laps = state.laps.map(el => ({...el, status: LapStatus.LAP_PAUSED}));
-      return {...state, laps}
+      return {...state, laps, globalState: GlobalState.PAUSED}
     }
 
     case ActionTypes.RESUME_COUNTER: {
       const laps = [...state.laps];
       laps[laps.length - 1].status = LapStatus.LAP_RESUMED
-      return {...state, laps}
+      return {...state, laps, globalState: GlobalState.RESUMED}
     }
 
     case ActionTypes.MERGE_COUNTER: {

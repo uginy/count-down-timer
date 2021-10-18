@@ -1,5 +1,6 @@
 export interface CountDownState {
   laps: CountDownLap[];
+  globalState: GlobalState;
   initialTimer: number;
   error: null | string;
 }
@@ -10,6 +11,14 @@ export enum LapStatus {
   LAP_STOPPED = 'LAP_STOPPED',
   LAP_STARTED = 'LAP_STARTED',
   LAP_MERGED = 'LAP_MERGED',
+}
+
+export enum GlobalState {
+  INIT = 'INIT',
+  PAUSED = 'PAUSED',
+  RESUMED = 'RESUMED',
+  STOPPED = 'STOPPED',
+  STARTED = 'STARTED',
 }
 
 export interface CountDownLap {
@@ -46,7 +55,7 @@ interface LoadStateAction {
 
 interface LoadStateSuccessAction {
   type: ActionTypes.LOAD_STATE_SUCCESS
-  payload: CountDownLap[]
+  payload: CountDownState
 }
 
 interface LoadStateErrorAction {

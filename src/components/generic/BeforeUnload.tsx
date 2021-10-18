@@ -5,13 +5,14 @@ import {useTypesSelector} from '../../hooks/useTypesSelector';
 
 const BeforeUnload = (): JSX.Element => {
   const {saveLocalState} = useActions()
-  const {laps} = useTypesSelector(state => state.countDown)
+  const state = useTypesSelector(state => state.countDown)
 
   const saveStateHandler = () => {
-    saveLocalState(laps)
+    console.log(state)
+    saveLocalState({...state})
   }
 
-  return <Beforeunload onBeforeunload={() => saveStateHandler }/>
+  return <Beforeunload onBeforeunload={() => saveStateHandler()}/>
 };
 
 export default BeforeUnload;
