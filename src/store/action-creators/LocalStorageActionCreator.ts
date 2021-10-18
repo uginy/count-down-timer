@@ -8,7 +8,6 @@ type TSaveState = (state: CountDownState) => (dispatch: Dispatch<CountDownAction
 export const loadLocalState: TLoadSate = () => {
   return (dispatch: Dispatch<CountDownAction>) => {
     try {
-      dispatch({type: ActionTypes.LOAD_STATE})
       const storage = localStorage.getItem(settings.localStorageKey);
       if (storage) {
         dispatch({type: ActionTypes.LOAD_STATE_SUCCESS, payload: JSON.parse(storage)})

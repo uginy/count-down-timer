@@ -5,7 +5,7 @@ import {useActions} from '../hooks/useActions';
 
 const CountDownTimerLaps = (): JSX.Element => {
   const {loadLocalState} = useActions()
-  const {laps} = useTypesSelector(state => state.countDown)
+  const {laps, globalState} = useTypesSelector(state => state.countDown)
 
   useEffect(() => {
     loadLocalState()
@@ -13,6 +13,7 @@ const CountDownTimerLaps = (): JSX.Element => {
 
   return (
     <>
+      {globalState}
       {laps?.map((el) => (
         <CountDownTimer key={el.id} {...el}/>
       ))}

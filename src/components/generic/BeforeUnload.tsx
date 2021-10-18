@@ -8,7 +8,6 @@ const BeforeUnload = (): JSX.Element => {
   const state = useTypesSelector(state => state.countDown)
 
   const saveStateHandler = () => {
-    console.log(state)
     saveLocalState({...state})
   }
 

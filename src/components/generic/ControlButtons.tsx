@@ -22,18 +22,18 @@ const ControlButtons: () => JSX.Element = () => {
     <>
       <span className='control-buttons'>
         <Button
-          disabled={isDisabled([GlobalState.STARTED])}
+          disabled={isDisabled([GlobalState.STARTED, GlobalState.INIT])}
           onClick={() => {
             resetCounter()
             initCounter()
           }}>Start
         </Button>
         <Button
-          disabled={isDisabled([GlobalState.STOPPED, GlobalState.INIT])}
+          disabled={isDisabled([GlobalState.STOPPED])}
           onClick={stopCounter}>Stop
         </Button>
         <Button
-          disabled={isDisabled([GlobalState.STOPPED, GlobalState.PAUSED, GlobalState.INIT])}
+          disabled={isDisabled([GlobalState.STOPPED, GlobalState.PAUSED])}
           onClick={pauseCounter}>Pause
         </Button>
         <Button

@@ -4,12 +4,18 @@ import {Col, Row} from 'antd';
 import TimePickerField from './generic/TimePicker';
 import ControlButtons from './generic/ControlButtons';
 import {useActions} from '../hooks/useActions';
+import {useTypesSelector} from '../hooks/useTypesSelector';
+import {GlobalState} from '../types';
 
 const CountDownControls = (): JSX.Element => {
   const {startCounter, mergeCounter} = useActions()
+  const {globalState} = useTypesSelector(state => state.countDown)
+
   useHotkeys('space', () => {
-    startCounter()
-  }, []);
+    if (globalState !== GlobalState.STOPPED) {
+      startCounter()
+    }
+  }, [globalState]);
 
   useHotkeys('backspace', () => {
     mergeCounter()
