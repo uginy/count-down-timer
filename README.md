@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-###Main stack:
+### Main stack:
 * React / Redux
 * Antd UI library (http://antd.com)
 
