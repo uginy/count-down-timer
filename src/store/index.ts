@@ -3,3 +3,5 @@ import {rootReducer} from './reducers';
 import thunk from 'redux-thunk';
 
 export const store = createStore(rootReducer, applyMiddleware(thunk))
+
+export type AppDispatch = typeof store.dispatch;
