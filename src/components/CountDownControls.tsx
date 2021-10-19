@@ -1,20 +1,24 @@
 import React from 'react';
-import {useHotkeys} from 'react-hotkeys-hook';
 import {Col, Row} from 'antd';
-import TimePickerField from './generic/TimePicker';
-import ControlButtons from './generic/ControlButtons';
+
+import {useHotkeys} from 'react-hotkeys-hook';
 import {useActions} from '../hooks/useActions';
 import {useTypesSelector} from '../hooks/useTypesSelector';
+
+import TimePickerField from './generic/TimePicker';
+import ControlButtons from './generic/ControlButtons';
+import GlobalStateInfo from './generic/GlobalStateInfo';
+
 import {GlobalState} from '../types';
 
 const CountDownControls = (): JSX.Element => {
   const {startCounter, mergeCounter} = useActions()
   const {globalState} = useTypesSelector(state => state.countDown)
 
+  const isNewCounter = globalState !== GlobalState.STOPPED
+
   useHotkeys('space', () => {
-    if (globalState !== GlobalState.STOPPED) {
-      startCounter()
-    }
+    isNewCounter && startCounter()
   }, [globalState]);
 
   useHotkeys('backspace', () => {
@@ -26,6 +30,7 @@ const CountDownControls = (): JSX.Element => {
       <Col className='control-bar'>
         <TimePickerField/>
         <ControlButtons/>
+        <GlobalStateInfo/>
       </Col>
     </Row>
   );

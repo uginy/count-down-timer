@@ -1,30 +1,40 @@
 import React, {FC, useEffect, useMemo, useRef} from "react";
-import useCountDownInterval from '../hooks/useCountDown';
 import styled from 'styled-components';
+
+import {useActions} from '../hooks/useActions';
+import {useTypesSelector} from '../hooks/useTypesSelector';
+import useCountDownInterval from '../hooks/useCountDown';
+
+import {CountDownLap, GlobalState, LapStatus} from '../types';
 import {msToHms} from '../utils';
-import {CountDownLap, LapStatus} from '../types';
-import moment from 'moment';
 
 interface StyledProps {
   isNegative?: boolean
 }
 
-const StyledCounter = styled.h1<StyledProps>`
-  color: ${({isNegative}) => isNegative ? 'red' : 'green'}
-`
 const StyledResult = styled.h3<StyledProps>`
   color: ${({isNegative}) => isNegative ? 'red' : 'green'};
-
-  & > span {
-    margin-left: 1rem;
-  }
 `;
 
-type Props = CountDownLap
-
-const CountDownTimer: FC<Props> = ({id, startTime, duration, status}) => {
+const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) => {
   const mounted = useRef(false);
-  const [currentTime, {start, stop, pause, resume}] = useCountDownInterval();
+  const {startedCounter, mergedCounter, updatedCounter, saveLocalState} = useActions()
+  const state = useTypesSelector(state => state.countDown);
+  const {globalState} = state;
+  const [nowTime, {start, stop, pause, resume}] = useCountDownInterval();
+  const isStateLoaded = useMemo(() => globalState === GlobalState.LOADED, [globalState])
+
+
+  useEffect(() => {
+    switch (globalState) {
+      case GlobalState.SAVED:
+        updatedCounter(nowTime);
+        saveLocalState(state);
+        break;
+      default:
+        break;
+    }
+  }, [globalState])
 
   useEffect(() => {
     mounted.current = true;
@@ -36,41 +46,51 @@ const CountDownTimer: FC<Props> = ({id, startTime, duration, status}) => {
       case LapStatus.LAP_STOPPED:
         stop()
         break;
+      case LapStatus.LAP_STARTED_MERGED:
+        start(currentTime)
+        break;
       case LapStatus.LAP_PAUSED:
-        start(startTime);
-        pause()
+        pause(isStateLoaded ? currentTime : null)
         break;
       case LapStatus.LAP_RESUMED:
-        resume()
+        resume(isStateLoaded ? currentTime : null)
         break;
       case LapStatus.LAP_MERGED:
-        start(startTime);
+        mergedCounter(nowTime);
+        stop();
+        break;
+      case LapStatus.LAP_CREATED:
+        startedCounter(nowTime)
+        stop();
+        break;
+      case LapStatus.LAP_LOADED:
+        start(currentTime);
         break;
       default:
-        start(startTime);
+        start(currentTime);
         break;
     }
     return () => {
+      updatedCounter(nowTime)
       mounted.current = false;
-      if(status === LapStatus.LAP_MERGED) {
-        stop();
-      }
     }
   }, [status])
 
-  const isStopped = useMemo(() => status === LapStatus.LAP_STOPPED, [status])
+  const startDateTime = useMemo(() => msToHms(startTime), [status])
+  const endDateTime = msToHms(nowTime)
+  const durationTime = msToHms(startTime - Math.abs(nowTime) || 0)
 
-  const startDateTime = moment(Date.now() - startTime).format("DD MMM YYYY HH:mm:ss")
-  const endDateTime = moment(Date.now() - (startTime - (duration ?? 0))).format("DD MMM YYYY HH:mm:ss")
-  const durationTime = msToHms(duration || 0);
   return (
-    <>
-      {isStopped
-        ? <StyledResult
-          isNegative={currentTime <= 0}>{id} / {startDateTime} / {endDateTime} / {durationTime}</StyledResult>
-        : <StyledCounter isNegative={currentTime <= 0}>{(msToHms(currentTime))}</StyledCounter>
-      }
-    </>
+    <div className='timer-row'>
+      <StyledResult isNegative={nowTime <= 0}>
+        <div className="counter">{endDateTime}</div>
+        <div className="counter-id"><small>ID</small><span>{id}</span></div>
+        <div><small>Start Time</small>{startDateTime}</div>
+        <div><small>End Time</small>{endDateTime}</div>
+        <div><small>Duration</small>{durationTime}</div>
+        <div className="counter-status"><small>Status</small>{status}</div>
+      </StyledResult>
+    </div>
   )
 };
 

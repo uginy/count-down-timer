@@ -1,8 +1,9 @@
 import {combineReducers} from 'redux';
-import {countDownReducer} from './countDownReducer';
+import {countdownReducer} from './countdown.reducer';
+
 
 export const rootReducer = combineReducers({
-  countDown: countDownReducer
+  countDown: countdownReducer
 })
 
 export type RootState = ReturnType<typeof rootReducer>

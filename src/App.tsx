@@ -1,16 +1,18 @@
 import React from 'react';
-import "./index.scss";
 import {Provider} from 'react-redux'
-import {store} from './store';
-import CountDownControls from './components/CountDownControls';
 import {Layout} from 'antd';
+import {store} from './store';
+
+import "./index.scss";
+
+import CountDownControls from './components/CountDownControls';
 import CountDownTimerLaps from './components/CountDownTimerLaps';
-import BeforeUnload from './components/generic/BeforeUnload';
+import BeforeUnloadComponent from './components/generic/BeforeUnload';
 
 const App = (): React.ReactElement => {
   return (
     <Provider store={store}>
-      <BeforeUnload/>
+      <BeforeUnloadComponent/>
       <Layout className='layout'>
         <Layout.Header>
           <CountDownControls/>

@@ -1,14 +1,13 @@
 import React from 'react';
 import {settings} from '../consts';
 
-const defaultInterval = 1
 const refreshRate = Math.floor(1000 / 60);
 
 interface IActions {
   start: (current: number) => void;
-  stop: () => void;
-  pause: () => void;
-  resume: () => void;
+  stop: (current?: number) => void;
+  pause: (current?: number | null) => void;
+  resume: (current?: number | null) => void;
 }
 
 interface ITimer {
@@ -18,7 +17,7 @@ interface ITimer {
 
 type ICountDown = [number, IActions]
 
-const useCountDownInterval = (interval: number = defaultInterval): ICountDown => {
+const useCountDownInterval = (interval: number = settings.defaultInterval): ICountDown => {
   const [currentTime, setCurrentTime] = React.useState<number>(settings.defaultInitialTime);
   const timer = React.useRef<ITimer>({
     currentTime: settings.defaultInitialTime,
@@ -48,35 +47,54 @@ const useCountDownInterval = (interval: number = defaultInterval): ICountDown =>
   );
 
   const stop = React.useCallback(
-    (): void => {
+    (current?: number): void => {
+      if(current) {
+        timer.current.currentTime = current;
+        setCurrentTime(() => current);
+      }
       if (!timer.current.requestId) {
         return;
       }
       window.cancelAnimationFrame(timer.current.requestId);
-      timer.current.currentTime = 0;
-      timer.current.requestId = null;
-      setCurrentTime(0);
+      if(!current) {
+        setCurrentTime(timer.current.currentTime);
+        timer.current.currentTime = 0;
+        timer.current.requestId = null;
+      }
     },
     [],
   );
 
   const pause = React.useCallback(
-    (): void => {
+    (current?: number | null): void => {
+      if (current) {
+        timer.current.currentTime = current;
+        setCurrentTime(() => current);
+      }
       if (!timer.current.requestId) {
         return;
       }
       window.cancelAnimationFrame(timer.current.requestId);
+      if (!current) {
+        setCurrentTime(timer.current.currentTime);
+      }
     },
     [],
   );
 
   const resume = React.useCallback(
-    (): void => {
+    (current?: number | null): void => {
+      if (current) {
+        timer.current.currentTime = current;
+        setCurrentTime(() => current);
+      }
       if (!timer.current.requestId) {
         return;
       }
       timer.current.requestId = window.requestAnimationFrame(calc);
-      setCurrentTime(timer.current.currentTime);
+      if(!current) {
+        setCurrentTime(timer.current.currentTime);
+      }
     },
     [],
   );

@@ -1,9 +1,11 @@
 import React from 'react';
 import moment, {Moment} from 'moment';
-import {msToHms} from '../../utils';
 import {TimePicker} from 'antd';
+
 import {useTypesSelector} from '../../hooks/useTypesSelector';
 import {useActions} from '../../hooks/useActions';
+
+import {msToHms} from '../../utils';
 
 const TimePickerField: () => JSX.Element = () => {
   const {initialTimer} = useTypesSelector(state => state.countDown)

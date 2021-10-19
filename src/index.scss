@@ -15,9 +15,56 @@ div#root {
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
     background: white;
-    max-width: 60%;
-    width: 60%;
+    max-width: 90%;
+    width: 90%;
     padding: 1rem;
+
+    .timer-row {
+      & > h3 {
+        flex:1
+      }
+      display: flex;
+      align-items: center;
+      .counter {
+        font-size: 1.5rem;
+      }
+      .counter-status {
+        font-size: 1rem;
+        flex:1;
+      }
+      .counter-id > span {
+        min-width: 2rem;
+        text-align: center;
+      }
+
+      & > * {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+
+        & > div {
+          display: flex;
+          align-items: center;
+          border-radius: 0.2rem;
+          background: #f0f0f0;
+          position: relative;
+          margin: 0 2px;
+          border: 1px solid silver;
+          padding: 0.3rem 1rem;
+
+          & > small {
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
+            line-height: 1rem;
+            background: white;
+            position: absolute;
+            left: 0.3rem;
+            top: -0.5rem;
+            padding: 0 0.3rem;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -27,17 +74,26 @@ div#root {
   justify-content: center;
   align-items: center;
 
-  & > *:not(:first-child) {
-    margin-left: 2px;
-  }
-
-  .time-picker {
-    min-width: 6rem;
-  }
   .control-buttons {
     white-space: nowrap;
     & > button:not(:first-child) {
       margin-left: 2px;
     }
+  }
+
+  & > *:not(:first-child) {
+    margin-left: 2px;
+  }
+
+  .global-state {
+    background: #646464;
+    color: white;
+    line-height: 2rem;
+    padding: 0 1rem;
+    margin-left: 1rem;
+  }
+
+  .time-picker {
+    min-width: 6rem;
   }
 }

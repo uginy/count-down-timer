@@ -1,17 +1,25 @@
 import React from 'react';
 import {Beforeunload} from 'react-beforeunload';
+
 import {useActions} from '../../hooks/useActions';
 import {useTypesSelector} from '../../hooks/useTypesSelector';
 
-const BeforeUnload = (): JSX.Element => {
-  const {saveLocalState} = useActions()
-  const state = useTypesSelector(state => state.countDown)
+import {GlobalState} from '../../types';
 
-  const saveStateHandler = () => {
-    saveLocalState({...state})
+const BeforeUnloadComponent = (): JSX.Element => {
+  const {saveState} = useActions()
+  const {globalState} = useTypesSelector(state => state.countDown)
+
+  const isSaveAllowed = globalState !== GlobalState.STOPPED
+
+  const saveStateHandler = (e: Event) => {
+    if (!isSaveAllowed) {
+      return;
+    }
+    saveState();
+    e.preventDefault();
   }
-
-  return <Beforeunload onBeforeunload={() => saveStateHandler()}/>
+  return <Beforeunload onBeforeunload={saveStateHandler}/>
 };
 
-export default BeforeUnload;
+export default BeforeUnloadComponent;

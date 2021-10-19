@@ -11,8 +11,12 @@ export const msToHms = (ms: number): string => {
   let millisecondsStr = milliseconds.toString();
   if (milliseconds < 100) {
     millisecondsStr = "0" + milliseconds;
-  } else if (milliseconds < 10) {
+  }
+  if (milliseconds < 10) {
     millisecondsStr = "00" + milliseconds;
+  }
+  if(milliseconds === 0) {
+    millisecondsStr = "000";
   }
   return hoursStr + ":" + minutesStr + ":" + secondsStr + "." + millisecondsStr;
 }
