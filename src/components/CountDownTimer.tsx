@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useMemo, useRef} from "react";
-import styled from 'styled-components';
+import clsx from 'clsx';
 
 import {useActions} from '../hooks/useActionsHook';
 import {useTypesSelector} from '../hooks/useTypesSelectorHook';
@@ -7,14 +7,6 @@ import useCountDownInterval from '../hooks/useCountDownHook';
 
 import {CountDownLap, GlobalStatus, LapStatus} from '../types';
 import {msToHms} from '../utils';
-
-interface StyledProps {
-  isNegative?: boolean
-}
-
-const StyledResult = styled.h3<StyledProps>`
-  color: ${({isNegative}) => isNegative ? 'red' : 'green'};
-`;
 
 const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) => {
   const mounted = useRef(false);
@@ -76,16 +68,16 @@ const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) 
   const endDateTime = msToHms(nowTime)
   const durationTime = msToHms(startTime - Math.abs(nowTime))
 
+  const isNegativeTimer = nowTime <= 0;
+
   return (
-    <div className='timer-row'>
-      <StyledResult isNegative={nowTime <= 0}>
+    <div className={clsx('timer-row', isNegativeTimer && 'negative')}>
         <div className="counter">{endDateTime}</div>
         <div className="counter-id"><small>ID</small><span>{id}</span></div>
         <div><small>Start Time</small>{startDateTime}</div>
         <div><small>End Time</small>{endDateTime}</div>
         <div><small>Duration</small>{durationTime}</div>
         <div className="counter-status"><small>Status</small>{status}</div>
-      </StyledResult>
     </div>
   )
 };
