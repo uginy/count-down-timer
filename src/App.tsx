@@ -3,7 +3,7 @@ import {Provider} from 'react-redux'
 import {Layout} from 'antd';
 import {store} from './store';
 
-import "./index.scss";
+import "./styles/index.scss";
 
 import CountDownControls from './components/CountDownControls';
 import CountDownTimerLaps from './components/CountDownTimerLaps';
