@@ -1,6 +1,6 @@
-import * as LocalStorageActionCreators from './local-storage.ac'
-import * as InitialActionCreator from './init.ac'
-import * as ControlsActionCreator from './controls.ac'
+import * as LocalStorageActionCreators from './local-storage.actions'
+import * as InitialActionCreator from './init.actions'
+import * as ControlsActionCreator from './controls.actions'
 
 export const ActionCreators = {
   ...LocalStorageActionCreators,

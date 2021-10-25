@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useMemo, useRef} from "react";
 import styled from 'styled-components';
 
-import {useActions} from '../hooks/useActions';
-import {useTypesSelector} from '../hooks/useTypesSelector';
-import useCountDownInterval from '../hooks/useCountDown';
+import {useActions} from '../hooks/useActionsHook';
+import {useTypesSelector} from '../hooks/useTypesSelectorHook';
+import useCountDownInterval from '../hooks/useCountDownHook';
 
-import {CountDownLap, GlobalState, LapStatus} from '../types';
+import {CountDownLap, GlobalStatus, LapStatus} from '../types';
 import {msToHms} from '../utils';
 
 interface StyledProps {
@@ -20,21 +20,17 @@ const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) 
   const mounted = useRef(false);
   const {startedCounter, mergedCounter, updatedCounter, saveLocalState} = useActions()
   const state = useTypesSelector(state => state.countDown);
-  const {globalState} = state;
+  const {globalStatus} = state;
   const [nowTime, {start, stop, pause, resume}] = useCountDownInterval();
-  const isStateLoaded = useMemo(() => globalState === GlobalState.LOADED, [globalState])
+  const isStateLoaded = useMemo(() => globalStatus === GlobalStatus.LOADED, [globalStatus])
 
 
   useEffect(() => {
-    switch (globalState) {
-      case GlobalState.SAVED:
-        updatedCounter(nowTime);
-        saveLocalState(state);
-        break;
-      default:
-        break;
+    if (globalStatus === GlobalStatus.SAVED) {
+      updatedCounter(nowTime);
+      saveLocalState(state);
     }
-  }, [globalState])
+  }, [globalStatus])
 
   useEffect(() => {
     mounted.current = true;
@@ -42,7 +38,7 @@ const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) 
       stop();
       return;
     }
-    switch (status) {
+    switch (status as LapStatus) {
       case LapStatus.LAP_STOPPED:
         stop()
         break;
@@ -78,7 +74,7 @@ const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) 
 
   const startDateTime = useMemo(() => msToHms(startTime), [status])
   const endDateTime = msToHms(nowTime)
-  const durationTime = msToHms(startTime - Math.abs(nowTime) || 0)
+  const durationTime = msToHms(startTime - Math.abs(nowTime))
 
   return (
     <div className='timer-row'>

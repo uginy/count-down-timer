@@ -2,8 +2,8 @@ import React from 'react';
 import moment, {Moment} from 'moment';
 import {TimePicker} from 'antd';
 
-import {useTypesSelector} from '../../hooks/useTypesSelector';
-import {useActions} from '../../hooks/useActions';
+import {useTypesSelector} from '../../hooks/useTypesSelectorHook';
+import {useActions} from '../../hooks/useActionsHook';
 
 import {msToHms} from '../../utils';
 

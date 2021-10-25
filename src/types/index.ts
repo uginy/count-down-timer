@@ -1,6 +1,6 @@
 export interface CountDownState {
   laps: CountDownLap[];
-  globalState: GlobalState;
+  globalStatus: GlobalStatus;
   initialTimer: number;
   error: null | string;
 }
@@ -16,7 +16,7 @@ export enum LapStatus {
   LAP_LOADED = 'LAP_LOADED'
 }
 
-export enum GlobalState {
+export enum GlobalStatus {
   INIT = 'INIT',
   PAUSED = 'PAUSED',
   RESUMED = 'RESUMED',

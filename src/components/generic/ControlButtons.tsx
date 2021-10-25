@@ -1,10 +1,10 @@
 import React from 'react';
 import {Button} from 'antd';
 
-import {useActions} from '../../hooks/useActions';
-import {useTypesSelector} from '../../hooks/useTypesSelector';
+import {useActions} from '../../hooks/useActionsHook';
+import {useTypesSelector} from '../../hooks/useTypesSelectorHook';
 
-import {GlobalState} from '../../types';
+import {GlobalStatus} from '../../types';
 
 const ControlButtons: () => JSX.Element = () => {
   const {
@@ -14,14 +14,18 @@ const ControlButtons: () => JSX.Element = () => {
     resumeCounter,
     clearLocalState
   } = useActions();
-  const {globalState} = useTypesSelector(state => state.countDown)
+  const {globalStatus} = useTypesSelector(state => state.countDown)
 
-  const isDisabled = (state: GlobalState[]) => state.includes(globalState)
+  const isDisabled = (state: GlobalStatus[]) => state.includes(globalStatus)
 
-  const isStartDisabled = isDisabled([GlobalState.STARTED, GlobalState.LOADED, GlobalState.PAUSED])
-  const isStopDisabled = isDisabled([GlobalState.STOPPED, GlobalState.INIT])
-  const isPauseDisabled = isDisabled([GlobalState.STOPPED, GlobalState.PAUSED, GlobalState.INIT])
-  const isResumeDisabled = isDisabled([GlobalState.STARTED, GlobalState.INIT, GlobalState.STOPPED, GlobalState.RESUMED, GlobalState.LOADED])
+  const isStartDisabled
+    = isDisabled([GlobalStatus.STARTED, GlobalStatus.LOADED, GlobalStatus.PAUSED, GlobalStatus.RESUMED])
+  const isStopDisabled
+    = isDisabled([GlobalStatus.STOPPED, GlobalStatus.INIT])
+  const isPauseDisabled
+    = isDisabled([GlobalStatus.STOPPED, GlobalStatus.PAUSED, GlobalStatus.INIT])
+  const isResumeDisabled
+    = isDisabled([GlobalStatus.STARTED, GlobalStatus.INIT, GlobalStatus.STOPPED, GlobalStatus.RESUMED, GlobalStatus.LOADED])
 
   const stopAndClear = () => {
     stopCounter();
@@ -33,7 +37,7 @@ const ControlButtons: () => JSX.Element = () => {
         <Button disabled={isStartDisabled} onClick={resetCounter}>Start</Button>
         <Button disabled={isStopDisabled} onClick={stopAndClear}>Stop</Button>
         <Button disabled={isPauseDisabled} onClick={pauseCounter}>Pause</Button>
-        <Button disabled={isResumeDisabled} onClick={resumeCounter}>Resume </Button>
+        <Button disabled={isResumeDisabled} onClick={resumeCounter}>Resume</Button>
     </span>
   )
 };

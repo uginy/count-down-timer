@@ -1,16 +1,16 @@
 import React from 'react';
 import {Beforeunload} from 'react-beforeunload';
 
-import {useActions} from '../../hooks/useActions';
-import {useTypesSelector} from '../../hooks/useTypesSelector';
+import {useActions} from '../../hooks/useActionsHook';
+import {useTypesSelector} from '../../hooks/useTypesSelectorHook';
 
-import {GlobalState} from '../../types';
+import {GlobalStatus} from '../../types';
 
 const BeforeUnloadComponent = (): JSX.Element => {
   const {saveState} = useActions()
-  const {globalState} = useTypesSelector(state => state.countDown)
+  const {globalStatus} = useTypesSelector(state => state.countDown)
 
-  const isSaveAllowed = globalState !== GlobalState.STOPPED
+  const isSaveAllowed = globalStatus !== GlobalStatus.STOPPED
 
   const saveStateHandler = (e: Event) => {
     if (!isSaveAllowed) {

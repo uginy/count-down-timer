@@ -1,10 +1,10 @@
 import React from 'react';
-import {useTypesSelector} from '../../hooks/useTypesSelector';
+import {useTypesSelector} from '../../hooks/useTypesSelectorHook';
 
 const GlobalStateInfo = (): JSX.Element => {
-  const {globalState} = useTypesSelector(state => state.countDown)
+  const {globalStatus} = useTypesSelector(state => state.countDown)
   return <div className='global-state'>
-    {globalState}
+    {globalStatus}
   </div>
 };
 

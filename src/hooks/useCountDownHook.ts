@@ -1,5 +1,5 @@
 import React from 'react';
-import {settings} from '../consts';
+import {CONFIG} from '../constants';
 
 const refreshRate = Math.floor(1000 / 60);
 
@@ -17,10 +17,10 @@ interface ITimer {
 
 type ICountDown = [number, IActions]
 
-const useCountDownInterval = (interval: number = settings.defaultInterval): ICountDown => {
-  const [currentTime, setCurrentTime] = React.useState<number>(settings.defaultInitialTime);
+const useCountDownInterval = (interval: number = CONFIG.defaultInterval): ICountDown => {
+  const [currentTime, setCurrentTime] = React.useState<number>(CONFIG.defaultInitialTime);
   const timer = React.useRef<ITimer>({
-    currentTime: settings.defaultInitialTime,
+    currentTime: CONFIG.defaultInitialTime,
     requestId: null,
   });
 

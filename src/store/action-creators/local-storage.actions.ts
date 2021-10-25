@@ -1,15 +1,15 @@
-import {ActionTypes, CountDownAction, CountDownState, GlobalState} from '../../types';
+import {ActionTypes, CountDownAction, CountDownState, GlobalStatus} from '../../types';
 import {Dispatch} from 'redux';
-import {settings} from '../../consts';
+import {CONFIG} from '../../constants';
 
-type TLoadSate = (globalState: GlobalState) => (dispatch: Dispatch<CountDownAction>) => void
+type TLoadSate = (globalStatus: GlobalStatus) => (dispatch: Dispatch<CountDownAction>) => void
 type TSaveState = (state: CountDownState) => (dispatch: Dispatch<CountDownAction>) => void
 type TAction = () => (dispatch: Dispatch<CountDownAction>) => void
 
 export const loadLocalState: TLoadSate = () => {
   return (dispatch: Dispatch<CountDownAction>) => {
     try {
-      const storage = localStorage.getItem(settings.localStorageKey);
+      const storage = localStorage.getItem(CONFIG.localStorageKey);
       if (storage) {
         dispatch({type: ActionTypes.LOAD_STATE_SUCCESS, payload: JSON.parse(storage)})
       } else {
@@ -36,7 +36,7 @@ export const saveState: TAction = () => {
 export const saveLocalState: TSaveState = (state: CountDownState) => {
   return (dispatch: Dispatch<CountDownAction>) => {
     try {
-      localStorage.setItem(settings.localStorageKey, JSON.stringify(state));
+      localStorage.setItem(CONFIG.localStorageKey, JSON.stringify(state));
       dispatch({type: ActionTypes.SAVE_STATE_SUCCESS, payload: state})
     } catch (e) {
       dispatch({
@@ -50,7 +50,7 @@ export const saveLocalState: TSaveState = (state: CountDownState) => {
 export const clearLocalState: TAction = () => {
   return (dispatch: Dispatch<CountDownAction>) => {
     try {
-      localStorage.removeItem(settings.localStorageKey);
+      localStorage.removeItem(CONFIG.localStorageKey);
     } catch (e) {
       dispatch({
         type: ActionTypes.SAVE_STATE_ERROR,
