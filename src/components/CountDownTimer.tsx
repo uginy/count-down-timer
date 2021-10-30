@@ -48,7 +48,7 @@ const CountDownTimer: FC<CountDownLap> = ({id, currentTime, startTime, status}) 
         stop();
         break;
       case LapStatus.LAP_CREATED:
-        startedCounter(nowTime)
+        startedCounter(nowTime);
         stop();
         break;
       case LapStatus.LAP_LOADED:

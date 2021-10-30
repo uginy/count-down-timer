@@ -8,6 +8,7 @@ import "./styles/index.scss";
 import CountDownControls from './components/CountDownControls';
 import CountDownTimerLaps from './components/CountDownTimerLaps';
 import BeforeUnloadComponent from './components/generic/BeforeUnload';
+import MainWrapper from './components/generic/MainWrapper';
 
 const App = (): React.ReactElement => {
   return (
@@ -18,9 +19,9 @@ const App = (): React.ReactElement => {
           <CountDownControls/>
         </Layout.Header>
         <Layout.Content className='content'>
-          <main>
+          <MainWrapper>
             <CountDownTimerLaps/>
-          </main>
+          </MainWrapper>
         </Layout.Content>
       </Layout>
     </Provider>
